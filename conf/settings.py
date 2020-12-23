@@ -11,19 +11,21 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()  # get environment vars
+root_path = environ.Path(__file__) - 2
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&e6atl**xi46+xa8mh&mtq&uva*reqx55)fdriwr8mc*(#ozj='
+SECRET_KEY = env("SECRET_KEY")  # read SECRET_KEY from envvar
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# read DEBUG from envvar, default to false
+DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = []
 
@@ -31,7 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'django.contrib.admin',  # TODO: consider disabling admin if we don't have any models
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -73,11 +75,9 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# no databases necessary
+# (there is no persistent server-side state)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
 }
 
 
