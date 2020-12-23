@@ -14,6 +14,8 @@ from pathlib import Path
 import environ
 
 env = environ.Env()  # get environment vars
+env.read_env()
+
 root_path = environ.Path(__file__) - 2
 
 
@@ -39,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Custom applications
+    "apps.converter",
 ]
 
 MIDDLEWARE = [
