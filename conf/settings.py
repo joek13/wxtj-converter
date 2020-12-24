@@ -35,7 +35,11 @@ DEBUG = env.bool("DEBUG", default=False)
 SPOTIFY_API_CLIENT_ID = env.str("SPOTIFY_API_CLIENT_ID")
 SPOTIFY_API_CLIENT_SECRET = env.str("SPOTIFY_API_CLIENT_SECRET")
 
-ALLOWED_HOSTS = []
+# Allowed Hosts
+# For Heroku deployments, this *needs* to be set to "*"
+# If you're deploying anywhere else, please make sure to
+# set this appropriately!
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -59,7 +63,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # whitenoise - static file hosting in prod
+    # (necessary because django does only serves static when DEBUG = true)
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+# enable gzip compression for static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'conf.urls'
 
@@ -122,6 +132,41 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+# Logging for Heroku
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+                       'pathname=%(pathname)s lineno=%(lineno)s ' +
+                       'funcname=%(funcName)s %(message)s'),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'testlogger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+}
 
 
 # Static files (CSS, JavaScript, Images)
