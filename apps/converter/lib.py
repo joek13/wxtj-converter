@@ -63,6 +63,22 @@ def extract_spotify_playlist_id(url: str) -> str:
         raise ValueError("Argument url must be a valid Spotify playlist URL.")
 
 
+def get_playlist_name(url: str) -> str:
+    """Gets the name of a playlist from its url.
+
+    Args:
+        url (str): The url of the playlist to get a name from.
+
+    Returns:
+        str: The name of the playlist indicated.
+    """
+    # fetch the playlist id
+    playlist_id = extract_spotify_playlist_id(url)
+    # return just the name field
+    playlist = spotify.playlist(playlist_id, fields=["name"])
+    return playlist["name"]
+
+
 def _duration_from_ms(duration_ms: int) -> typing.Tuple[int, int]:
     """Converts a duration in milliseconds to a tuple of 2 ints: minutes, seconds
 

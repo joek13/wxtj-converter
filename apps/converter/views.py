@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseNotAllowed
 from django.contrib import messages
+from django.utils import text
 
 import spotipy
 
@@ -29,10 +30,18 @@ def generate_playlist(request: HttpResponse) -> HttpResponse:
                 lib.write_playlist_csv(playlist_url, csvstream)
                 csvstream.seek(0)
 
+                playlist_name = lib.get_playlist_name(playlist_url)
+
+                if not playlist_name:
+                    # in case playlist_name = ""
+                    playlist_name = "playlist"
+
+                filename = text.slugify(playlist_name) + ".csv"
+
                 # create response object
                 resp = HttpResponse(csvstream, content_type="text/csv")
                 # force download
-                resp["Content-Disposition"] = "attachment; filename=playlist.csv"
+                resp["Content-Disposition"] = f"attachment; filename={filename}"
                 return resp
             except ValueError as e:
                 messages.add_message(request, messages.ERROR, e.message)
