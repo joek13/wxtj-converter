@@ -31,7 +31,7 @@
                         <div class="field"> {% csrf_token %}
                             <h2 class="subtitle label">paste your Spotify playlist URL:</h2>
                             <div class="control">
-                                <input class="input" type="url" name="playlist_url"
+                                <input class="input" type="url" name="playlist_url" autocomplete="off"
                                     placeholder="https://open.spotify.com/playlist/7A7Ot2wJeaI1mA68LSa5pz?si=76hjoNDdTT2gdpninjE4Rw" />
                             </div>
                         </div>
@@ -43,13 +43,13 @@
                     </form>
                 </div>
             </div>
-            <div class="hero is-medium">
+            <div class="hero">
                 <div class="hero-body">
                     <!-- dummy hero as a spacer -->
                 </div>
             </div>
             <div class="block">
-                <h2 class="title is-4">How it works:</h2>
+                <h2 class="title is-4">how it works:</h2>
             </div>
             <div class="columns">
                 <div class="column is-quarter mx-5">
@@ -69,6 +69,10 @@
         </div>
         </div>
     </section>
+    <footer class="footer has-text-centered">
+        <p>made by joe kerrigan</p>
+        <p>check out the source code <a href="https://github.com/joek13/wxtj-converter">on github</a> </p>
+    </footer>
 </body>
 
 </html>
