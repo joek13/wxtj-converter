@@ -5,4 +5,5 @@ from django.http import HttpRequest, HttpResponse
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    return HttpResponse("Index works!")
+    # render static template (sort of inefficient)
+    return render(request, "index.html", {})
