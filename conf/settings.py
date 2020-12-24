@@ -30,6 +30,11 @@ SECRET_KEY = env("SECRET_KEY")  # read SECRET_KEY from envvar
 # read DEBUG from envvar, default to false
 DEBUG = env.bool("DEBUG", default=False)
 
+# SPOTIFY API CREDENTIALS
+# Keep these a secret!
+SPOTIFY_API_CLIENT_ID = env.str("SPOTIFY_API_CLIENT_ID")
+SPOTIFY_API_CLIENT_SECRET = env.str("SPOTIFY_API_CLIENT_SECRET")
+
 ALLOWED_HOSTS = []
 
 
