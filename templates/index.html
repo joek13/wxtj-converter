@@ -10,7 +10,42 @@
 </head>
 
 <body>
-    <h1>Test Header</h1>
+    <section class="section">
+        <div class="container mt-6 has-text-centered">
+            <div class="block">
+                <h1 class="title">wxtj playlist tool</h1>
+                <p>quickly convert your Spotify playlists to CSV files for the wxtj playlist
+                    editor</p>
+            </div>
+            <div class="columns">
+                <div class="block column is-half is-offset-one-quarter">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="notification is-danger has-text-left">
+                        <p class="has-text-weight-bold">Oopsie</p>
+                        <p>{{ message }}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <form action="/generate" method="GET">
+                        <div class="field"> {% csrf_token %}
+                            <h2 class="subtitle label">paste your Spotify playlist URL:</h2>
+                            <div class="control">
+                                <input class="input" type="url" name="playlist_url"
+                                    placeholder="https://open.spotify.com/playlist/7A7Ot2wJeaI1mA68LSa5pz?si=76hjoNDdTT2gdpninjE4Rw" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <input type="submit" class="button is-primary" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
 </body>
 
 </html>
