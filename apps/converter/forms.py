@@ -1,4 +1,5 @@
 from django import forms
+from . import lib
 
 
 class PlaylistForm(forms.Form):
@@ -8,7 +9,7 @@ class PlaylistForm(forms.Form):
         # override is_valid so we can make sure playlist_url is a valid Spotify playlist URL
         if super().is_valid():
             url_clean = self.cleaned_data["playlist_url"]
-            if "spotify" in url_clean:  # TODO: lib function
+            if lib.validate_spotify_playlist_url(url_clean):
                 return True
             else:
                 self.add_error(
