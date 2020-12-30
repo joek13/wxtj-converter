@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/styles/bulma.min.css" />
+    <link rel="stylesheet" href="/static/styles/style.css" />
+</head>
+
+<body>
+    <section class="section">
+        <div class="container mt-6 has-text-centered">
+            <div class="columns">
+                <div class="block column is-half is-offset-one-quarter">
+                    <h2 class="title is-2">warnings</h2>
+                    <div class="block">
+                        <p class="is-size-4">I apologize for the inconvenience, but I wasn't able to find all of the
+                            playlist's details automatically. Here are the issues:</p>
+                    </div>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="notification is-warning has-text-left">
+                        <p class="has-text-weight-bold">Warning</p>
+                        <p>{{ message }}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <a href="{{ continue_download_url }}"><button class="button is-primary">Continue</button></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

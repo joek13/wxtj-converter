@@ -104,14 +104,18 @@ def _duration_from_ms(duration_ms: int) -> typing.Tuple[int, int]:
     return (minutes, seconds)
 
 
-def write_playlist_csv(url: str, stream: typing.TextIO):
+def write_playlist_csv(url: str, stream: typing.TextIO) -> typing.List[str]:
     """Gets the playlist from a url, formats it as a csv file, and writes the csv to a given stream.
 
     Args:
         url (str): The url to get a playlist from.
         stream (typing.TextIO): The stream to write the playlist CSV to. Can be a file, a StringIO, etc.
+
+    Returns:
+        warnings (typing.List[str]): A list-like of strings describing any pertinent warnings.
     """
     writer = csv.writer(stream)  # create csvwriter around stream
+    warnings = []
     # write standard WXTJ header row
     # TODO: investigate why this header is nothing like the actual playlist editor headers
     writer.writerow(["title", "title_url", "duration", "performer", "performer_url",
@@ -126,6 +130,8 @@ def write_playlist_csv(url: str, stream: typing.TextIO):
     for item in playlist_items["items"]:
         # fetch relevant variables
         track = item["track"]
+        # is this track local? (imported from personal library)
+        is_local_track = track["is_local"]
         artist = track["artists"][0]  # just get the first artist on the track
         track_name = track["name"]
 
@@ -133,10 +139,25 @@ def write_playlist_csv(url: str, stream: typing.TextIO):
         album_name = album["name"]  # name of the album
         artist_name = artist["name"]  # name of the artist
 
-        album_ext = spotify.album(album["id"])  # get additional info for album
-        label = album_ext["label"]  # record label that published the album
-        # get the first four chars of release date
-        release_year = album["release_date"][0:4]
+        label = None
+        release_year = None
+        # we can only get additional album info on non-local tracks.
+        # Spotify doesn't carry extended album info for imports from
+        # local library.
+        if not is_local_track:
+            # get additional info for album
+            album_ext = spotify.album(album["id"])
+            label = album_ext["label"]  # record label that published the album
+            # get the first four chars of release date
+            release_year = album["release_date"][0:4]
+        else:
+            # we can't get this info ourselves, so it'll just have to be filled in manually.
+            # TODO: music database?
+            label = ""
+            release_year = ""
+            # add warning
+            warnings.append(
+                f"Track '{track_name}' was imported from your library, so I can't find its label or release year automatically. Please fill these into the station interface manually.")
 
         duration_ms = int(track["duration_ms"])
         duration_minutes, duration_seconds = _duration_from_ms(duration_ms)
@@ -156,3 +177,5 @@ def write_playlist_csv(url: str, stream: typing.TextIO):
         ]
 
         writer.writerow(row)
+
+    return warnings

@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseNotAllowed
 from django.contrib import messages
 from django.utils import text
+from django.urls import reverse
+import urllib.parse
 
 import spotipy
 
@@ -27,7 +29,31 @@ def generate_playlist(request: HttpResponse) -> HttpResponse:
             # Generate the playlist csv
             try:
                 csvstream = io.StringIO()
-                lib.write_playlist_csv(playlist_url, csvstream)
+                warnings = lib.write_playlist_csv(playlist_url, csvstream)
+
+                # has the user already been warned? should we proceed with the download?
+                not_yet_warned = "warned" not in request.GET or request.GET["warned"] != "1"
+                if warnings and not_yet_warned:
+                    # if there are warnings, and the user hasn't yet seen them, don't start the download.
+                    # instead, render the warnings page, and provide a link that will actually start the download.
+                    for warning in warnings:
+                        messages.add_message(
+                            request, messages.WARNING, warning)
+
+                    download_view_root = reverse("generate_playlist")
+
+                    # grab some GET parameters from the request
+                    csrf = urllib.parse.quote(
+                        request.GET["csrfmiddlewaretoken"])  # csrf token
+                    playlist_url = urllib.parse.quote(
+                        request.GET["playlist_url"])  # original playlist url
+
+                    # note the appended "&warned=1"
+                    continue_download_url = f"{download_view_root}?csrfmiddlewaretoken={csrf}&playlist_url={playlist_url}&warned=1"
+
+                    return render(request, "warnings.html", {
+                        "continue_download_url": continue_download_url
+                    })
                 csvstream.seek(0)
 
                 playlist_name = lib.get_playlist_name(playlist_url)
