@@ -157,7 +157,7 @@ def write_playlist_csv(url: str, stream: typing.TextIO) -> typing.List[str]:
             release_year = ""
             # add warning
             warnings.append(
-                f"Track '{track_name}' was imported from your library, so I can't find its label or release year automatically. Please fill these into the station interface manually.")
+                f"Track '{track_name}' was imported from your library, so I can't find its label or release year automatically. Other details may be missing or incomplete. Please fill these into the station interface manually.")
 
         duration_ms = int(track["duration_ms"])
         duration_minutes, duration_seconds = _duration_from_ms(duration_ms)
