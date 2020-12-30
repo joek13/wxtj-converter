@@ -12,7 +12,7 @@ from django.conf import settings
 from spotipy.oauth2 import SpotifyClientCredentials
 
 SPOTIFY_PLAYLIST_URL_REGEX = re.compile(
-    r"(?:http|https)://open\.spotify\.com/playlist/([^?]+)(?:\?.+)", re.IGNORECASE)
+    r"(?:http|https)://open\.spotify\.com/playlist/([^?]+)(?:\?.+)?", re.IGNORECASE)
 """Regular expression that matches URLs for Spotify playlist links and extracts their IDs
 """
 
