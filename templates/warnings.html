@@ -11,13 +11,18 @@
 
 <body>
     <section class="section">
-        <div class="container mt-6 has-text-centered">
+        <div class="container mt-3 has-text-centered">
             <div class="columns">
                 <div class="block column is-half is-offset-one-quarter">
                     <h2 class="title is-2">warnings</h2>
                     <div class="block">
-                        <p class="is-size-4">I apologize for the inconvenience, but I wasn't able to find all of the
-                            playlist's details automatically. Here are the issues:</p>
+                        <p class="is-size-5">I apologize for the inconvenience, but I wasn't able to find all of the
+                            playlist's details automatically. <span class="has-text-weight-semibold">You can still
+                                download your converted playlist, but some
+                                data will need to be entered manually.</span></p>
+                    </div>
+                    <div class="block">
+                        <p class="is-size-4">Here are the issues:</p>
                     </div>
                     {% if messages %}
                     {% for message in messages %}
@@ -27,7 +32,8 @@
                     </div>
                     {% endfor %}
                     {% endif %}
-                    <a href="{{ continue_download_url }}"><button class="button is-primary">Continue</button></a>
+                    <a href="{{ continue_download_url }}"><button class="button is-primary">continue with
+                            download</button></a>
                 </div>
             </div>
         </div>
