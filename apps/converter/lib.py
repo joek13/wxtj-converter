@@ -117,9 +117,8 @@ def write_playlist_csv(url: str, stream: typing.TextIO) -> typing.List[str]:
     writer = csv.writer(stream)  # create csvwriter around stream
     warnings = []
     # write standard WXTJ header row
-    # TODO: investigate why this header is nothing like the actual playlist editor headers
-    writer.writerow(["title", "title_url", "duration", "performer", "performer_url",
-                     "album", "album_url", "released", "label", "composer", "composer_url", "notes"])
+    writer.writerow(["title", "duration", "performer", "album",
+                     "label", "year", "composer", "notes"])
 
     # fetch the playlist id
     playlist_id = extract_spotify_playlist_id(url)
