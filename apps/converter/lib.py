@@ -5,6 +5,7 @@ import re
 import spotipy
 import typing
 import csv
+import enum
 
 from django.core import validators
 from django.conf import settings
@@ -21,6 +22,20 @@ cred_manager = SpotifyClientCredentials(
     client_secret=settings.SPOTIFY_API_CLIENT_SECRET
 )
 spotify = spotipy.Spotify(client_credentials_manager=cred_manager)
+
+
+class OutputFormat(enum.Enum):
+    """Enum whose values represent the possible output formats for the converter.
+    """
+
+    NEW_PLAYLIST_EDITOR = "NEW"
+    """
+    Format for the WTJU "new" playlist editor.
+    """
+    OLD_PLAYLIST_EDITOR = "OLD"
+    """
+    Format for the WTJU "old" playlist editor.
+    """
 
 
 def validate_spotify_playlist_url(url: str) -> bool:
@@ -104,12 +119,13 @@ def _duration_from_ms(duration_ms: int) -> typing.Tuple[int, int]:
     return (minutes, seconds)
 
 
-def write_playlist_csv(url: str, stream: typing.TextIO) -> typing.List[str]:
+def write_playlist_csv(url: str, stream: typing.TextIO, format: OutputFormat = OutputFormat.NEW_PLAYLIST_EDITOR) -> typing.List[str]:
     """Gets the playlist from a url, formats it as a csv file, and writes the csv to a given stream.
 
     Args:
         url (str): The url to get a playlist from.
         stream (typing.TextIO): The stream to write the playlist CSV to. Can be a file, a StringIO, etc.
+        format (OutputFormat): Output format for the .csv playlist file.
 
     Returns:
         warnings (typing.List[str]): A list-like of strings describing any pertinent warnings.
@@ -117,8 +133,14 @@ def write_playlist_csv(url: str, stream: typing.TextIO) -> typing.List[str]:
     writer = csv.writer(stream)  # create csvwriter around stream
     warnings = []
     # write standard WXTJ header row
-    writer.writerow(["title", "duration", "performer", "album",
-                     "year", "label", "composer", "notes"])
+    if format == OutputFormat.NEW_PLAYLIST_EDITOR:
+        writer.writerow(["title", "duration", "performer", "album",
+                         "year", "label", "composer", "notes"])
+    elif format == OutputFormat.OLD_PLAYLIST_EDITOR:
+        writer.writerow(["title", "title_url", "duration", "performer", "performer_url",
+                         "album", "album_url", "released", "label", "composer", "composer_url", "notes"])
+    else:
+        raise ValueError(f"Unrecognized output format {format}")
 
     # fetch the playlist id
     playlist_id = extract_spotify_playlist_id(url)
@@ -164,16 +186,34 @@ def write_playlist_csv(url: str, stream: typing.TextIO) -> typing.List[str]:
         # pad out seconds so (3, 2) -> "3:02"
         duration_str = f"{duration_minutes}:{str(duration_seconds).zfill(2)}"
 
-        row = [
-            track_name,
-            duration_str,
-            artist_name,
-            album_name,
-            release_year,
-            label,
-            "",
-            ""
-        ]
+        if format == OutputFormat.NEW_PLAYLIST_EDITOR:
+            row = [
+                track_name,
+                duration_str,
+                artist_name,
+                album_name,
+                release_year,
+                label,
+                "",
+                ""
+            ]
+        elif format == OutputFormat.OLD_PLAYLIST_EDITOR:
+            row = [
+                track_name,  # track title
+                "",  # title_url
+                duration_str,  # duration
+                artist_name,  # performer
+                "",  # performer_url
+                album_name,  # album
+                "",  # album_url
+                release_year,  # released
+                label,  # label
+                "",  # composer
+                "",  # composer url
+                ""  # notes
+            ]
+        else:
+            raise ValueError(f"Unrecognized output format {format}")
 
         writer.writerow(row)
 

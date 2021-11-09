@@ -1,3 +1,4 @@
+from re import T
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseNotAllowed
 from django.contrib import messages
@@ -26,10 +27,17 @@ def generate_playlist(request: HttpResponse) -> HttpResponse:
         if form.is_valid():
             # Great! form is valid
             playlist_url = form.cleaned_data["playlist_url"]
+
+            if form.cleaned_data["format_old"]:
+                format = lib.OutputFormat.OLD_PLAYLIST_EDITOR
+            else:
+                format = lib.OutputFormat.NEW_PLAYLIST_EDITOR
+
             # Generate the playlist csv
             try:
                 csvstream = io.StringIO()
-                warnings = lib.write_playlist_csv(playlist_url, csvstream)
+                warnings = lib.write_playlist_csv(
+                    playlist_url, csvstream, format=format)
 
                 # has the user already been warned? should we proceed with the download?
                 not_yet_warned = "warned" not in request.GET or request.GET["warned"] != "1"
@@ -47,13 +55,15 @@ def generate_playlist(request: HttpResponse) -> HttpResponse:
                         request.GET["csrfmiddlewaretoken"])  # csrf token
                     playlist_url = urllib.parse.quote(
                         request.GET["playlist_url"])  # original playlist url
+                    format_old = urllib.parse.quote(request.GET["format_old"])
 
                     # note the appended "&warned=1"
-                    continue_download_url = f"{download_view_root}?csrfmiddlewaretoken={csrf}&playlist_url={playlist_url}&warned=1"
+                    continue_download_url = f"{download_view_root}?csrfmiddlewaretoken={csrf}&playlist_url={playlist_url}&format_old={format_old}&warned=1"
 
                     return render(request, "warnings.html", {
                         "continue_download_url": continue_download_url
                     })
+
                 csvstream.seek(0)
 
                 playlist_name = lib.get_playlist_name(playlist_url)

@@ -4,6 +4,7 @@ from . import lib
 
 class PlaylistForm(forms.Form):
     playlist_url = forms.URLField()
+    format_old = forms.BooleanField(required=False)
 
     def is_valid(self) -> bool:
         # override is_valid so we can make sure playlist_url is a valid Spotify playlist URL
