@@ -4,6 +4,7 @@ import convertlib
 import spotipy
 import os
 import io
+from datetime import date
 
 SPOTIFY_API_CLIENT_ID = os.environ["SPOTIFY_API_CLIENT_ID"]
 SPOTIFY_API_CLIENT_SECRET = os.environ["SPOTIFY_API_CLIENT_SECRET"]
@@ -50,6 +51,19 @@ class TestPlaylistConverter(unittest.TestCase):
         buffer = io.StringIO()
         warnings = convertlib.write_new_playlist_csv(
             spotify, playlist_id, buffer)
+
+        # make sure there are no warnings
+        self.assertEqual(warnings, [])
+
+    def test_old_playlist_converter(self):
+        # makes sure there are no warnings/errors when converting playlist
+        playlist_url = "https://open.spotify.com/playlist/1LOp2ieUmspXzw61pQ4LCi?si=0909c61a78814603"
+        playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
+
+        # allocate buffer to contain the converted csv
+        buffer = io.StringIO()
+        warnings = convertlib.write_old_playlist_csv(
+            spotify, playlist_id, "hot tub listening club", date.today(), buffer,)
 
         # make sure there are no warnings
         self.assertEqual(warnings, [])
