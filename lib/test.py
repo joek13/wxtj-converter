@@ -1,3 +1,5 @@
+"""Unit tests for the converter library.
+"""
 import util
 import unittest
 import convertlib
@@ -16,6 +18,11 @@ spotify = spotipy.Spotify(client_credentials_manager=spotify_creds)
 
 class TestPlaylistConverter(unittest.TestCase):
     def test_url_extractor(self):
+        """Tests that the URL extractor:
+        - correctly extracts IDs from playlist URLs
+        - correctly rejects invalid URLs
+        - correctly rejects valid URLs that are not Spotify playlist URLs
+        """
         playlist_url = "https://open.spotify.com/playlist/1LOp2ieUmspXzw61pQ4LCi?si=0909c61a78814603"
         playlist_id = "1LOp2ieUmspXzw61pQ4LCi"
 
@@ -43,6 +50,8 @@ class TestPlaylistConverter(unittest.TestCase):
         self.assertRaises(ValueError, invalidUrl3)
 
     def test_new_playlist_converter(self):
+        """Tests that the "new playlist editor" converter works without emitting any warnings
+        """
         # makes sure there are no warnings/errors when converting playlist
         playlist_url = "https://open.spotify.com/playlist/1LOp2ieUmspXzw61pQ4LCi?si=0909c61a78814603"
         playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
@@ -56,6 +65,8 @@ class TestPlaylistConverter(unittest.TestCase):
         self.assertEqual(warnings, [])
 
     def test_old_playlist_converter(self):
+        """Tests that the "old playlist editor" converter works without emitting any warnings
+        """
         # makes sure there are no warnings/errors when converting playlist
         playlist_url = "https://open.spotify.com/playlist/1LOp2ieUmspXzw61pQ4LCi?si=0909c61a78814603"
         playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
@@ -63,7 +74,7 @@ class TestPlaylistConverter(unittest.TestCase):
         # allocate buffer to contain the converted csv
         buffer = io.StringIO()
         warnings = convertlib.write_old_playlist_csv(
-            spotify, playlist_id, "hot tub listening club", date.today(), buffer,)
+            spotify, playlist_id, "hot tub listening club", date.today(), buffer)
 
         # make sure there are no warnings
         self.assertEqual(warnings, [])
@@ -71,6 +82,11 @@ class TestPlaylistConverter(unittest.TestCase):
 
 class TestUtil(unittest.TestCase):
     def test_duration_converter(self):
+        """Tests that the duration converter/formatter:
+        - correctly formats times longer than one minute
+        - correctly formats one minute
+        - correctly formats times shorter than one minute
+        """
         three_minutes_fortytwo_seconds = 3 * 60 * 1000 + 42 * 1000 + 33
         # three minutes, forty two seconds, 33 ms = 3:42
 
