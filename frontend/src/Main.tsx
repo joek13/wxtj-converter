@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Container, Row } from "react-bootstrap";
+import Footer from "./components/footer";
 import Header from "./components/header"
 import Howto from "./components/howto";
 import { Options, ConvertParams } from "./components/options";
@@ -17,6 +18,7 @@ function Main() {
                 <Options handleSubmit={convert} />
             </Container>
             <Howto />
+            <Footer />
         </main>
     </>);
 }
