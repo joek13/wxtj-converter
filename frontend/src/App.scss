@@ -4,7 +4,7 @@
 
 body {
     font-family: Inter, sans-serif;
-    font-size: 1.2rem;
+    // font-size: 1.2rem;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -13,4 +13,10 @@ h1,h2,h3,h4,h5,h6 {
 
 .jumbotron {
     margin-top: 2rem;
+}
+
+.container-xs, .container-sm, .container-md, .container-lg, .container-xl {
+    &.options {
+        max-width: 750px;
+    }
 }
