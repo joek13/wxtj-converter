@@ -12,22 +12,28 @@ from datetime import date
 SPOTIFY_API_CLIENT_ID = os.environ["SPOTIFY_API_CLIENT_ID"]
 SPOTIFY_API_CLIENT_SECRET = os.environ["SPOTIFY_API_CLIENT_SECRET"]
 
+# use memory cache handler
+# we only need to store one token, and Lambda instances don't have filesystem access
+cache_handler = spotipy.cache_handler.MemoryCacheHandler()
+
+# initialize login credentials
 spotify_creds = spotipy.SpotifyClientCredentials(
-    client_id=SPOTIFY_API_CLIENT_ID, client_secret=SPOTIFY_API_CLIENT_SECRET)
+    client_id=SPOTIFY_API_CLIENT_ID, client_secret=SPOTIFY_API_CLIENT_SECRET, cache_handler=cache_handler)
 spotify = spotipy.Spotify(client_credentials_manager=spotify_creds)
 
 
 def convert_new_playlist(event, context):
-    playlist_url = event["playlist_url"]
+    body = json.loads(event.get("body", "{}"))
+    playlist_url = body["playlist_url"]
 
     try:
         playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
     except ValueError as e:
         response = {
             "statusCode": 400,
-            "body": {
+            "body": json.dumps({
                 "error": str(e)
-            }
+            })
         }
 
         return response
@@ -40,9 +46,9 @@ def convert_new_playlist(event, context):
     except SpotifyException as e:
         response = {
             "statusCode": 400,
-            "body": {
+            "body": json.dumps({
                 "error": str(e)
-            }
+            })
         }
 
         return response
@@ -51,19 +57,20 @@ def convert_new_playlist(event, context):
 
     response = {
         "statusCode": 200,
-        "body": {
+        "body": json.dumps({
             "warnings": warnings,
             "body": buffer.read()
-        }
+        })
     }
 
     return response
 
 
 def convert_old_playlist(event, context):
-    playlist_url = event["playlist_url"]
-    show_title = event["show_title"]
-    show_date = date.fromisoformat(event["show_date"])
+    body = json.loads(event.get("body", "{}"))
+    playlist_url = body["playlist_url"]
+    show_title = body["show_title"]
+    show_date = date.fromisoformat(body["show_date"])
 
     try:
         playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
@@ -96,30 +103,10 @@ def convert_old_playlist(event, context):
 
     response = {
         "statusCode": 200,
-        "body": {
+        "body": json.dumps({
             "warnings": warnings,
             "body": buffer.read()
-        }
+        })
     }
 
     return response
-
-
-def hello(event, context):
-    body = {
-        "message": "Go Serverless v2.0! Your function executed successfully!",
-        "input": event,
-    }
-
-    response = {"statusCode": 200, "body": json.dumps(body)}
-
-    return response
-
-    # Use this code if you don't use the http event with the LAMBDA-PROXY
-    # integration
-    """
-    return {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "event": event
-    }
-    """
