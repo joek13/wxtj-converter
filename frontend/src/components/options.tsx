@@ -23,9 +23,9 @@ export function Options(_: { handleSubmit: (options: ConvertParams) => void }) {
     };
 
     let handleOutputFormatChanged = (ev: ChangeEvent<HTMLInputElement>) => {
-        // store preferred output format in local storage, since it is likely to stay the same across multiple visits
         let useOldPlaylistEditor = ev.currentTarget.checked;
 
+        // store preferred output format in local storage, since it is likely to stay the same across multiple visits
         localStorage.setItem("useOldPlaylistEditor", useOldPlaylistEditor.toString());
         setUseOldPlaylistEditor(useOldPlaylistEditor);
     }
@@ -40,11 +40,11 @@ export function Options(_: { handleSubmit: (options: ConvertParams) => void }) {
                 <Form.Label>Playlist URL</Form.Label>
                 <Form.Control placeholder="https://open.spotify.com/playlist/4BmW06g5m70HkwZEA1mds9?si=9f6b19eec5fd44e3" value={playlistUrl} onChange={e => setPlaylistUrl(e.currentTarget.value)} required={true} />
             </Form.Group>
-            <Form.Group className="" controlId="oldPlaylistEditor">
+            <Form.Group className="mb-2" controlId="oldPlaylistEditor">
                 <Form.Check checked={useOldPlaylistEditor} onChange={handleOutputFormatChanged} label="Format for Old Playlist Editor" />
             </Form.Group>
             {useOldPlaylistEditor ?
-                (<Row className="px-2">
+                (<Row>
                     <Col>
                         <Form.Group controlId="showTitle">
                             <Form.Label>Show title</Form.Label>
@@ -61,7 +61,9 @@ export function Options(_: { handleSubmit: (options: ConvertParams) => void }) {
                     </Col>
                 </Row>)
                 : null}
-            <Button variant="primary" type="submit" className="mt-3" onClick={handleSubmit}>Convert</Button>
+            <div className="text-center">
+                <Button variant="primary" type="submit" className="mt-3" onClick={handleSubmit}>Convert</Button>
+            </div>
         </Form>
     </>;
 }
