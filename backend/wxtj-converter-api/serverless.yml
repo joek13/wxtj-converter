@@ -7,9 +7,22 @@ provider:
   lambdaHashingVersion: '20201221'
 
 functions:
-  hello:
-    handler: handler.hello
+  convert_new_playlist:
+    handler: handler.convert_new_playlist
     events:
       - httpApi:
-          path: /
-          method: get
+          path: /convert_new_playlist
+          method: post
+  convert_old_playlist:
+    handler: handler.convert_old_playlist
+    events:
+      - httpApi:
+          path: /convert_old_playlist
+          method: post
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux  

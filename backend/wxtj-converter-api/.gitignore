@@ -19,3 +19,6 @@ __pycache__/
 
 # Serverless directories
 .serverless
+
+# spotipy cache
+.cache

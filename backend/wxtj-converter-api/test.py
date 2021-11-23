@@ -1,6 +1,6 @@
 """Unit tests for the converter library.
 """
-import util
+import convertlib.util as util
 import unittest
 import convertlib
 import spotipy

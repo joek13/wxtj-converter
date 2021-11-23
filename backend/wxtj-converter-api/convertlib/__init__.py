@@ -6,7 +6,7 @@ import typing
 import csv
 import spotipy
 from datetime import date
-import util
+from . import util
 import re
 
 
