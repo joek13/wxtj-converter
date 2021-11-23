@@ -22,6 +22,21 @@ spotify_creds = spotipy.SpotifyClientCredentials(
 spotify = spotipy.Spotify(client_credentials_manager=spotify_creds)
 
 
+def _make_response(response: dict) -> dict:
+    """Takes a response object and adds CORS headers.
+    """
+    # base response
+    base_response = {
+        "headers": {
+            # allow requests from all origins
+            "Access-Control-Allow-Origin": "*"
+        }
+    }
+
+    # merge dictionaries, with the argument taking precedence
+    return {**base_response, **response}
+
+
 def convert_new_playlist(event, context):
     body = json.loads(event.get("body", "{}"))
     playlist_url = body["playlist_url"]
@@ -36,7 +51,7 @@ def convert_new_playlist(event, context):
             })
         }
 
-        return response
+        return _make_response(response)
 
     try:
         buffer = io.StringIO()
@@ -51,7 +66,7 @@ def convert_new_playlist(event, context):
             })
         }
 
-        return response
+        return _make_response(response)
 
     buffer.seek(0)
 
@@ -63,7 +78,7 @@ def convert_new_playlist(event, context):
         })
     }
 
-    return response
+    return _make_response(response)
 
 
 def convert_old_playlist(event, context):
@@ -82,7 +97,7 @@ def convert_old_playlist(event, context):
             }
         }
 
-        return response
+        return _make_response(response)
 
     try:
         buffer = io.StringIO()
@@ -97,7 +112,7 @@ def convert_old_playlist(event, context):
             }
         }
 
-        return response
+        return _make_response(response)
 
     buffer.seek(0)
 
@@ -109,4 +124,4 @@ def convert_old_playlist(event, context):
         })
     }
 
-    return response
+    return _make_response(response)

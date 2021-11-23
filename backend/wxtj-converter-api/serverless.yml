@@ -5,6 +5,8 @@ provider:
   name: aws
   runtime: python3.8
   lambdaHashingVersion: '20201221'
+  httpApi:
+    cors: true
   environment:
     SPOTIFY_API_CLIENT_ID: ${env:SPOTIFY_API_CLIENT_ID}
     SPOTIFY_API_CLIENT_SECRET: ${env:SPOTIFY_API_CLIENT_SECRET}
