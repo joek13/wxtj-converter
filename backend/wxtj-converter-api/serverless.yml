@@ -10,12 +10,6 @@ provider:
     SPOTIFY_API_CLIENT_SECRET: ${env:SPOTIFY_API_CLIENT_SECRET}
 
 functions:
-  echo:
-    handler: handler.echo
-    events:
-      - httpApi:
-          path: /echo
-          method: post
   convert_new_playlist:
     handler: handler.convert_new_playlist
     events:
