@@ -6,7 +6,7 @@ function Header() {
             <section className="jumbotron text-center">
                 <Container>
                     <h1>wxtju/wtju playlist converter</h1>
-                    <p>Quickly convert your Spotify playlists to .csv</p>
+                    <p className="lead">Quickly convert your Spotify playlists to <code>.csv</code></p>
                 </Container>
             </section>
         </header>

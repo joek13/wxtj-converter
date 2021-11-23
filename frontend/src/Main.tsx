@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Container, Row } from "react-bootstrap";
 import Header from "./components/header"
+import Howto from "./components/howto";
 import { Options, ConvertParams } from "./components/options";
 
 function Main() {
@@ -10,10 +11,13 @@ function Main() {
     };
 
     return (<>
-        <Header />
-        <Container className="options" fluid="md">
-            <Options handleSubmit={convert} />
-        </Container>
+        <main>
+            <Header />
+            <Container className="options" fluid="md">
+                <Options handleSubmit={convert} />
+            </Container>
+            <Howto />
+        </main>
     </>);
 }
 
