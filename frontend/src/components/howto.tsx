@@ -2,6 +2,9 @@ import { Col, Container, Image, Row } from "react-bootstrap";
 import help1 from "../img/help1.png";
 import help2 from "../img/help2.png";
 
+/**
+ * Howto component with brief visual explanation of how to use the app.
+ */
 export default function Howto() {
     return (<Container className="text-center mt-5">
         <h2 className="h4 mb-3">How it works</h2>

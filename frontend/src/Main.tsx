@@ -6,11 +6,15 @@ import Howto from "./components/howto";
 import { Options, ConvertParams } from "./components/options";
 import axios from "axios";
 
+/**
+ * Main component of the app.
+ */
 function Main() {
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
     const [warnings, setWarnings] = useState<string[]>([]);
 
+    // callback for when user presses "convert"
     let convert = (params: ConvertParams) => {
         // start loading
         setLoading(true);
@@ -28,6 +32,7 @@ function Main() {
             "show_date": params.showDate
         };
 
+        // post request to api endpoint
         axios.post(apiEndpoint, data).then((response) => {
             if (response.data) {
                 setWarnings(response.data.warnings);
@@ -42,6 +47,7 @@ function Main() {
                 element.click();
                 element.remove();
             } else {
+                // don't know how to handle this response, display generic error message
                 setErrorMessage("Malformed response");
             }
         }).catch((err) => {
@@ -51,17 +57,24 @@ function Main() {
             console.log(err);
 
             if (err.response) {
+                // response error
+                // display a descriptive message if we can
                 if (err.response.data && err.response.data.error) {
                     setErrorMessage(err.response.data.error);
                 } else {
                     setErrorMessage("Unknown server error");
                 }
             } else if (err.request) {
+                // request error
+                // just display a generic message
                 setErrorMessage("Unknown request error");
             } else {
+                // generic error message
                 setErrorMessage("Unknown error")
             }
         }).finally(() => {
+            // regardless of whether request was successful or not:
+            // disable the loading spinner
             setLoading(false);
         });
     };

@@ -1,5 +1,8 @@
 import { Container } from "react-bootstrap";
 
+/**
+ * Header component with snazzy title and subtitle.
+ */
 function Header() {
     return (
         <header>

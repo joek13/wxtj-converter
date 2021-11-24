@@ -1,5 +1,8 @@
 import { Container } from "react-bootstrap";
 
+/**
+ * App footer with contact info and source code link.
+ */
 export default function Footer() {
     return <footer>
         <Container className="bg-light text-center p-5" fluid>
