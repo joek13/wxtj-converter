@@ -3,6 +3,9 @@ A React web application that converts Spotify playlists to the `.csv` format use
 
 Access the webapp [here](https://joek13.github.io/wxtj-converter).
 
+## Rewrite notice!
+This project was rewritten from the ground up to use a single-page app. The legacy application is written with Django, and the legacy application's source code is still available on the `legacy` branch.
+
 
 ## Project structure
 
