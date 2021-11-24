@@ -92,9 +92,9 @@ def convert_old_playlist(event, context):
     except ValueError as e:
         response = {
             "statusCode": 400,
-            "body": {
+            "body": json.dumps({
                 "error": str(e)
-            }
+            })
         }
 
         return _make_response(response)
