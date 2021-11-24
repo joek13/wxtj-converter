@@ -1,5 +1,5 @@
 # WXTJ (&WTJU) Playlist Converter
-The WXTJ/WTJU Playlist Converter is a web application that accepts Spotify playlist URLs and converts them to a CSV file suitable for uploading on the station interface at [WTJU](http://wtju.net/), the radio station at the University of Virginia.
+A React web application that converts Spotify playlists to the `.csv` format used by [WTJU](http://wtju.net/)'s station interface.
 
 Access the webapp [here](https://joek13.github.io/wxtj-converter).
 
@@ -27,7 +27,12 @@ This will:
 2. Publish it on the `gh-pages` branch of the GitHub repository.
 
 ### Deploying the backend
-Before deploying the backend you will need to [configure the Serverless Framework to access your AWS account](https://www.serverless.com/framework/docs/providers/aws/guide/credentials).
+Before deploying the backend you will need to [configure the Serverless Framework to access your AWS account](https://www.serverless.com/framework/docs/providers/aws/guide/credentials). You will also need to set environment variables for your Spotify API keys, for instance by running the following commands:
+
+```bash
+export SPOTIFY_API_CLIENT_ID="<your api client id>"
+export SPOTIFY_API_CLIENT_SECRET="<your api client secret>"
+```
 
 You can deploy the backend by navigating to `./backend` and running:
 
