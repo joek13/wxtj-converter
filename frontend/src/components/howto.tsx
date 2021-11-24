@@ -10,11 +10,11 @@ export default function Howto() {
         <h2 className="h4 mb-3">How it works</h2>
         <Row>
             <Col className="px-4" md>
-                <Image src={help1} className="mb-2" alt="Image of a Spotify playlist. The user is clicking the Share submenu and selecting the option Copy Playlist Link." fluid rounded />
+                <Image src={help1} className="mb-2" width="600" height="365" alt="Image of a Spotify playlist. The user is clicking the Share submenu and selecting the option Copy Playlist Link." fluid rounded />
                 <p>Right-click your playlist on Spotify. Use Share &gt; Copy Playlist Link, and paste the URL in the box above.</p>
             </Col>
             <Col className="px-4" md>
-                <Image src={help2} className="mb-2" alt="Image of the WTJU station interface." fluid rounded />
+                <Image src={help2} className="mb-2" width="600" height="365" alt="Image of the WTJU station interface." fluid rounded />
                 <p>Once the <code>.csv</code> file is downloaded, open your show WTJU's playlist editor. Look at "upload playlist", choose the downloaded <code>.csv</code> file, and click "upload".</p>
             </Col>
         </Row>
