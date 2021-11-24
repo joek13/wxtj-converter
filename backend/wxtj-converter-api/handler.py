@@ -85,7 +85,18 @@ def convert_old_playlist(event, context):
     body = json.loads(event.get("body", "{}"))
     playlist_url = body["playlist_url"]
     show_title = body["show_title"]
-    show_date = date.fromisoformat(body["show_date"])
+    try:
+        show_date = date.fromisoformat(body["show_date"])
+    except ValueError as e:
+        # invalid ISO date
+        response = {
+            "statusCode": 400,
+            "body": json.dumps({
+                "error": f"Invalid date: {body['show_date']}"
+            })
+        }
+
+        return _make_response(response)
 
     try:
         playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
