@@ -101,10 +101,29 @@ function Main() {
                         <p>{errorMessage}</p>
                     </Alert>
                 </Container>)}
+            {/* render warnings if present */}
+            {warnings !== [] && <Warnings warnings={warnings} />}
             <Howto />
             <Footer />
         </main>
     </>);
+}
+
+/**
+ * Displays warnings for a given conversion.
+ */
+function Warnings(props: { warnings: string[] }) {
+    const { warnings } = props;
+    return <Container className="options" fluid="md">
+        {
+            warnings.map((warning) => (
+                <Alert variant="warning">
+                    <Alert.Heading>Track warning</Alert.Heading>
+                    <p>{warning}</p>
+                </Alert>
+            ))
+        }
+    </Container >
 }
 
 export default Main;
