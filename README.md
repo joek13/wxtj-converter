@@ -13,7 +13,9 @@ This project was rewritten from the ground up to use a single-page app. The lega
 The `frontend/` subdirectory contains code for the frontend. It's a static web application, built using React and TypeScript based on the `create-react-app` template.
 
 ### Backend
-The `backend` subdirectory contains code for the backend. Right now, it's a [Serverless Framework](https://www.serverless.com/) project made of two functions, which are backed by AWS Lambda and API Gateway.
+The `backend/` subdirectory contains code for the backend. Right now, it's a [Serverless Framework](https://www.serverless.com/) project made up of two Python functions, which are backed by AWS Lambda and API Gateway.
+
+The functions dispatch calls to the [Spotify Web API](https://developer.spotify.com/documentation/web-api/), serialize playlists to the appropriate format, and return the generated `.csv`.
 
 ## Deploying
 NB: eventually, both of these steps will happen automatically on pushes to `main`.
@@ -42,3 +44,9 @@ You can deploy the backend by navigating to `./backend` and running:
 ```bash
 serverless deploy --stage prod
 ```
+
+## Features/TODO
+- [x] Convert Spotify playlists to old/new playlist editor format
+- [ ] Integrate with a music database to provide information about tracks from local library
+    - [ ] ...and solve issues discriminating between composer/performer
+- [ ] Optimize to use Spotify Bulk APIs and avoid ratelimits
