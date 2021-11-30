@@ -8,6 +8,9 @@ import os
 import io
 from datetime import date
 
+# TODO: find some place to put this file so we can
+# test the convertlib automatically.
+
 SPOTIFY_API_CLIENT_ID = os.environ["SPOTIFY_API_CLIENT_ID"]
 SPOTIFY_API_CLIENT_SECRET = os.environ["SPOTIFY_API_CLIENT_SECRET"]
 

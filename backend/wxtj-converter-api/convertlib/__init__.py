@@ -115,6 +115,7 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
         # local library.
         if not is_local_track:
             # get additional info for album
+            # TODO: use the bulk albums endpoint so we don't hit rate limits so easily
             album_ext = spotify.album(album["id"])
             label = album_ext["label"]  # record label that published the album
             # get the first four chars of release date
@@ -200,6 +201,7 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
         # local library.
         if not is_local_track:
             # get additional info for album
+            # TODO: use the bulk albums endpoint so we don't hit rate limits so easily
             album_ext = spotify.album(album["id"])
             label = album_ext["label"]  # record label that published the album
             # get the first four chars of release date

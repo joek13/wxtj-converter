@@ -42,6 +42,10 @@ def convert_new_playlist(event, context):
     playlist_url = body["playlist_url"]
 
     try:
+        # try and extract playlist id from URL
+        # note: spotipy actually can handle playlist URLs, but by
+        # doing this validation ourselves, we can at least provide
+        # some nicer error messages in case the user does something wrong.
         playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
     except ValueError as e:
         response = {
@@ -54,7 +58,10 @@ def convert_new_playlist(event, context):
         return _make_response(response)
 
     try:
+        # buffer we will write output CSV into
         buffer = io.StringIO()
+        # write_new_playlist_csv returns the warnings encountered
+        # writes the converted CSV into buffer
         warnings = convertlib.write_new_playlist_csv(
             spotify, playlist_id, buffer)
 
@@ -68,6 +75,7 @@ def convert_new_playlist(event, context):
 
         return _make_response(response)
 
+    # seek to beginning of buffer so we can begin reading
     buffer.seek(0)
 
     response = {
@@ -86,6 +94,7 @@ def convert_old_playlist(event, context):
     playlist_url = body["playlist_url"]
     show_title = body["show_title"]
     try:
+        # validate the show date selected by the user
         show_date = date.fromisoformat(body["show_date"])
     except ValueError as e:
         # invalid ISO date
@@ -99,6 +108,10 @@ def convert_old_playlist(event, context):
         return _make_response(response)
 
     try:
+        # try and extract playlist id from URL
+        # note: spotipy actually can handle playlist URLs, but by
+        # doing this validation ourselves, we can at least provide
+        # some nicer error messages in case the user does something wrong.
         playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
     except ValueError as e:
         response = {
@@ -111,7 +124,10 @@ def convert_old_playlist(event, context):
         return _make_response(response)
 
     try:
+        # buffer we will write output CSV into
         buffer = io.StringIO()
+        # write_new_playlist_csv returns the warnings encountered
+        # writes the converted CSV into buffer
         warnings = convertlib.write_old_playlist_csv(
             spotify, playlist_id, show_title, show_date, buffer)
 
@@ -125,6 +141,7 @@ def convert_old_playlist(event, context):
 
         return _make_response(response)
 
+    # seek to beginning of buffer so we can begin reading
     buffer.seek(0)
 
     response = {
