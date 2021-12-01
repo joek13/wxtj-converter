@@ -4,6 +4,7 @@ import Footer from "./components/footer";
 import Header from "./components/header"
 import Howto from "./components/howto";
 import { Options, ConvertParams } from "./components/options";
+import slugify from "slugify";
 import axios from "axios";
 
 /**
@@ -37,12 +38,14 @@ function Main() {
             if (response.data) {
                 setWarnings(response.data.warnings);
 
+                let playlistName = response.data.playlistName;
+
                 // sort of a hack: download the csv file
                 // thanks https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react/44661948
                 const element = document.createElement("a");
                 const file = new Blob([response.data.body], { type: 'text/plain' });
                 element.href = URL.createObjectURL(file);
-                element.download = "playlist.csv";
+                element.download = `${slugify(playlistName)}.csv`;
                 document.body.appendChild(element); // Required for this to work in FireFox
                 element.click();
                 element.remove();
