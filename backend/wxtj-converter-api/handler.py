@@ -62,7 +62,7 @@ def convert_new_playlist(event, context):
         buffer = io.StringIO()
         # write_new_playlist_csv returns the warnings encountered
         # writes the converted CSV into buffer
-        warnings = convertlib.write_new_playlist_csv(
+        playlist_name, warnings = convertlib.write_new_playlist_csv(
             spotify, playlist_id, buffer)
 
     except SpotifyException as e:
@@ -81,6 +81,7 @@ def convert_new_playlist(event, context):
     response = {
         "statusCode": 200,
         "body": json.dumps({
+            "playlistName": playlist_name,
             "warnings": warnings,
             "body": buffer.read()
         })
@@ -128,7 +129,7 @@ def convert_old_playlist(event, context):
         buffer = io.StringIO()
         # write_new_playlist_csv returns the warnings encountered
         # writes the converted CSV into buffer
-        warnings = convertlib.write_old_playlist_csv(
+        playlist_name, warnings = convertlib.write_old_playlist_csv(
             spotify, playlist_id, show_title, show_date, buffer)
 
     except SpotifyException as e:
@@ -147,6 +148,7 @@ def convert_old_playlist(event, context):
     response = {
         "statusCode": 200,
         "body": json.dumps({
+            "playlistName": playlist_name,
             "warnings": warnings,
             "body": buffer.read()
         })

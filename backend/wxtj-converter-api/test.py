@@ -61,11 +61,13 @@ class TestPlaylistConverter(unittest.TestCase):
 
         # allocate buffer to contain the converted csv
         buffer = io.StringIO()
-        warnings = convertlib.write_new_playlist_csv(
+        name, warnings = convertlib.write_new_playlist_csv(
             spotify, playlist_id, buffer)
 
         # make sure there are no warnings
         self.assertEqual(warnings, [])
+        # and that the playlist name is correct
+        self.assertEqual(name, "songs people wrote about their pets")
 
     def test_old_playlist_converter(self):
         """Tests that the "old playlist editor" converter works without emitting any warnings
@@ -76,11 +78,13 @@ class TestPlaylistConverter(unittest.TestCase):
 
         # allocate buffer to contain the converted csv
         buffer = io.StringIO()
-        warnings = convertlib.write_old_playlist_csv(
+        name, warnings = convertlib.write_old_playlist_csv(
             spotify, playlist_id, "hot tub listening club", date.today(), buffer)
 
         # make sure there are no warnings
         self.assertEqual(warnings, [])
+        # and that the playlist name is correct
+        self.assertEqual(name, "songs people wrote about their pets")
 
 
 class TestUtil(unittest.TestCase):

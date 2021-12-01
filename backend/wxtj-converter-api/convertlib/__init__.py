@@ -72,10 +72,10 @@ def extract_playlist_id_from_url(url: str) -> str:
         raise ValueError("Argument url must be a valid URl")
 
 
-def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: typing.TextIO) -> typing.List[str]:
+def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: typing.TextIO) -> typing.Tuple[str, typing.List[str]]:
     """Converts a Spotify playlist with the given ID into a CSV file, formatted for WTJU's new playlist editor.
-    Writes the output to a given file-like object, and returns a list of human-readable warnings in case individual tracks
-    could not be converted.
+    Writes the output to a given file-like object, and returns the playlist name with a list of human-readable 
+    warnings in case individual tracks could not be converted.
 
     Args:
         spotify (spotipy.Spotify): Spotify API client instance to use for API requests.
@@ -83,13 +83,16 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
         stream (typing.TextIO): File-like object to write the converted CSV to.
 
     Returns:
-        typing.List[str]: List of human-readable warnings
+        typing.Tuple[str, typing.List[str]]: Playlist name and list of human-readable warnings
     """
 
     writer = csv.writer(stream)
     warnings = []
     # write the CSV header row
     writer.writerow(NEW_EDITOR_HEADERS)
+
+    # make API call for playlist name
+    playlist_name = spotify.playlist(playlist_id, fields=["name"])["name"]
 
     # make API call for the playlist's items (i.e., its tracks)
     playlist_items = spotify.playlist_items(playlist_id)
@@ -151,11 +154,13 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
         writer.writerow(row)
 
     # return any warnings we encountered
-    return warnings
+    return playlist_name, warnings
 
 
-def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_title: str, show_date: date, stream: typing.TextIO) -> typing.List[str]:
-    """Converts a Spotify playlist to CSV format for WTJU's old playlist editor.
+def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_title: str, show_date: date, stream: typing.TextIO) -> typing.Tuple[str, typing.List[str]]:
+    """Converts a Spotify playlist with the given ID into a CSV file, formatted for WTJU's new playlist editor.
+    Writes the output to a given file-like object, and returns the playlist name with a list of human-readable 
+    warnings in case individual tracks could not be converted.
 
     Args:
         spotify (spotipy.Spotify): Spotify API client instance to use for API calls.
@@ -165,7 +170,7 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
         stream (typing.TextIO): File-like object to write the converted CSV file.
 
     Returns:
-        typing.List[str]: List of human-readable warnings
+        typing.Tuple[str, typing.List[str]]: Playlist name and list of human-readable warnings
     """
     writer = csv.writer(stream)
     warnings = []
@@ -176,6 +181,9 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
 
     # write the CSV header row
     writer.writerow(OLD_EDITOR_HEADERS)
+
+    # make API call for playlist name
+    playlist_name = spotify.playlist(playlist_id, fields=["name"])["name"]
 
     # make API call for the playlist's items (i.e., its tracks)
     playlist_items = spotify.playlist_items(playlist_id)
@@ -241,4 +249,4 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
         writer.writerow(row)
 
     # return any warnings we encountered
-    return warnings
+    return playlist_name, warnings
