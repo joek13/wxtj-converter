@@ -38,7 +38,9 @@ function Main() {
             if (response.data) {
                 setWarnings(response.data.warnings);
 
-                let playlistName = response.data.playlistName;
+                // possible for the backend to not return a playlist name
+                // (sometimes, for whatever reason, spotify web api returns 404)
+                let playlistName = response.data.playlistName || "playlist";
 
                 // sort of a hack: download the csv file
                 // thanks https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react/44661948

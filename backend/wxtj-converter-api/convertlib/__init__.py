@@ -91,8 +91,14 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
     # write the CSV header row
     writer.writerow(NEW_EDITOR_HEADERS)
 
-    # make API call for playlist name
-    playlist_name = spotify.playlist(playlist_id, fields=["name"])["name"]
+    try:
+        # make API call for playlist name
+        playlist_name = spotify.playlist(playlist_id, fields=["name"])["name"]
+    except spotipy.SpotifyException:
+        # for some reason, this API call sometimes returns 404
+        # so far, have been able to reproduce on spotify wrapped playlists;
+        # odd.
+        playlist_name = None
 
     # make API call for the playlist's items (i.e., its tracks)
     playlist_items = spotify.playlist_items(playlist_id)
@@ -182,8 +188,14 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
     # write the CSV header row
     writer.writerow(OLD_EDITOR_HEADERS)
 
-    # make API call for playlist name
-    playlist_name = spotify.playlist(playlist_id, fields=["name"])["name"]
+    try:
+        # make API call for playlist name
+        playlist_name = spotify.playlist(playlist_id, fields=["name"])["name"]
+    except spotipy.SpotifyException:
+        # for some reason, this API call sometimes returns 404
+        # so far, have been able to reproduce on spotify wrapped playlists;
+        # odd.
+        playlist_name = None
 
     # make API call for the playlist's items (i.e., its tracks)
     playlist_items = spotify.playlist_items(playlist_id)
