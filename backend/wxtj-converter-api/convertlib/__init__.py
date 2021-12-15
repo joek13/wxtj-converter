@@ -91,6 +91,10 @@ def _get_bulk_album_info(spotify: spotipy.Spotify, playlist_items: typing.List) 
         if item["track"] is not None and not item["track"]["is_local"]
     ]
 
+    # remove duplicates from list, in case the playlist contains multiple tracks
+    # from the same album.
+    album_ids = list(set(album_ids))
+
     albums = {}
 
     # the 'get several albums' endpoint allows a maximum of 20 album ids per request,
