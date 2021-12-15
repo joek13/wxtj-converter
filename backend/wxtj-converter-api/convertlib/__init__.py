@@ -72,9 +72,44 @@ def extract_playlist_id_from_url(url: str) -> str:
         raise ValueError("Argument url must be a valid URl")
 
 
+def _get_bulk_album_info(spotify: spotipy.Spotify, playlist_items: typing.List) -> typing.Dict[str, typing.Dict]:
+    """Uses the 'get several albums' endpoint to fetch the playlist items' album info all at once.
+
+    Args:
+        spotify (spotipy.Spotify): Spotify API client instance.
+        playlist_items (typing.List): List of playlist items, as returned from spotify.playlist_items
+
+    Returns:
+        typing.Dict[typing.String, typing.Dict]: Mapping from album ID to album info objects.
+    """
+    album_ids = [
+        # get the album ID of all tracks in the playlist,
+        item["track"]["album"]["id"] for item in playlist_items["items"]
+        # provided that:
+        # - they are actually tracks
+        # - and they are not local tracks
+        if item["track"] is not None and not item["track"]["is_local"]
+    ]
+
+    albums = {}
+
+    # the 'get several albums' endpoint allows a maximum of 20 album ids per request,
+    # so we (potentially) have to batch requests.
+    for i in range(0, len(album_ids), 20):
+        # process in chunks of 20 album ids
+        chunk_ids = album_ids[i:i+20]
+        resp = spotify.albums(chunk_ids)
+
+        for album_info in resp["albums"]:
+            album_id = album_info["id"]
+            albums[album_id] = album_info
+
+    return albums
+
+
 def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: typing.TextIO) -> typing.Tuple[str, typing.List[str]]:
     """Converts a Spotify playlist with the given ID into a CSV file, formatted for WTJU's new playlist editor.
-    Writes the output to a given file-like object, and returns the playlist name with a list of human-readable 
+    Writes the output to a given file-like object, and returns the playlist name with a list of human-readable
     warnings in case individual tracks could not be converted.
 
     Args:
@@ -102,6 +137,9 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
 
     # make API call for the playlist's items (i.e., its tracks)
     playlist_items = spotify.playlist_items(playlist_id)
+
+    # get info for all albums in this playlist
+    album_info = _get_bulk_album_info(spotify, playlist_items)
 
     # TODO: >100 tracks in a playlist? (spotipy uses limit=100 by default)
     # responses are paginated
@@ -134,8 +172,10 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
         # local library.
         if not is_local_track:
             # get additional info for album
-            # TODO: use the bulk albums endpoint so we don't hit rate limits so easily
-            album_ext = spotify.album(album["id"])
+            album_id = album["id"]  # get album id for this track
+            # lookup in the premade dictionary (as opposed to making new api request)
+            album_ext = album_info[album_id]
+
             label = album_ext["label"]  # record label that published the album
             # get the first four chars of release date
             release_year = album["release_date"][0:4]
@@ -210,6 +250,9 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
     # make API call for the playlist's items (i.e., its tracks)
     playlist_items = spotify.playlist_items(playlist_id)
 
+    # get info for all albums in this playlist
+    album_info = _get_bulk_album_info(spotify, playlist_items)
+
     # TODO: >100 tracks in a playlist? (spotipy uses limit=100 by default)
     # responses are paginated
     for item in playlist_items["items"]:
@@ -241,8 +284,10 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
         # local library.
         if not is_local_track:
             # get additional info for album
-            # TODO: use the bulk albums endpoint so we don't hit rate limits so easily
-            album_ext = spotify.album(album["id"])
+            album_id = album["id"]  # get album id for this track
+            # lookup in the premade dictionary (as opposed to making new api request)
+            album_ext = album_info[album_id]
+
             label = album_ext["label"]  # record label that published the album
             # get the first four chars of release date
             release_year = album["release_date"][0:4]
