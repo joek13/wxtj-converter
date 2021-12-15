@@ -108,6 +108,16 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
     for item in playlist_items["items"]:
         # fetch relevant variables
         track = item["track"]
+
+        # for whatever reason, even when setting additional_items=["track"], Spotify Web API
+        # returns entries for podcast epsiodes. Unfortunately, the response contains no
+        # useful data (like the podcast name), so we just have to give this blanket error message.
+        if track is None:
+            warnings.append(
+                "I couldn't find details on an item in your playlist, so I ignored it. (This could be caused by a podcast episode in your playlist.)")
+            # just skip it
+            continue
+
         # is this track local? (imported from personal library)
         is_local_track = track["is_local"]
         artist = track["artists"][0]  # just get the first artist on the track
@@ -205,6 +215,16 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
     for item in playlist_items["items"]:
         # fetch relevant variables
         track = item["track"]
+
+        # for whatever reason, even when setting additional_items=["track"], Spotify Web API
+        # returns entries for podcast epsiodes. Unfortunately, the response contains no
+        # useful data (like the podcast name), so we just have to give this blanket error message.
+        if track is None:
+            warnings.append(
+                "I couldn't find details on an item in your playlist, so I ignored it. (This could be caused by a podcast episode in your playlist.)")
+            # just skip it
+            continue
+
         # is this track local? (imported from personal library)
         is_local_track = track["is_local"]
         artist = track["artists"][0]  # just get the first artist on the track
