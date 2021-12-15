@@ -49,4 +49,4 @@ serverless deploy --stage prod
 - [x] Convert Spotify playlists to old/new playlist editor format
 - [ ] Integrate with a music database to provide information about tracks from local library
     - [ ] ...and solve issues discriminating between composer/performer
-- [ ] Optimize to use Spotify Bulk APIs and avoid ratelimits
+- [x] Optimize to use Spotify Bulk APIs and avoid ratelimits
