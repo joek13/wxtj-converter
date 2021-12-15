@@ -69,6 +69,32 @@ class TestPlaylistConverter(unittest.TestCase):
         # and that the playlist name is correct
         self.assertEqual(name, "songs people wrote about their pets")
 
+    def test_new_playlist_converter_local_track_warnings(self):
+        # makes sure there ARE warnings when converting playlists with local tracks
+        playlist_url = "https://open.spotify.com/playlist/4rDiZp82mJm55e0Se3OkpI?si=9c987e7cea6b4458"
+        playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
+
+        # allocate buffer to contain the converted csv
+        buffer = io.StringIO()
+        _, warnings = convertlib.write_new_playlist_csv(
+            spotify, playlist_id, buffer)
+
+        # make sure there are warnings
+        self.assertNotEqual(warnings, [])
+
+    def test_new_playlist_converter_podcast_warnings(self):
+        # makes sure there ARE warnings when converting playlists containing podcast episodes
+        playlist_url = "https://open.spotify.com/playlist/7a5Ecmgilx7LdsPsGZlkZZ?si=185c9d6e5feb495c"
+        playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
+
+        # allocate buffer to contain the converted csv
+        buffer = io.StringIO()
+        _, warnings = convertlib.write_new_playlist_csv(
+            spotify, playlist_id, buffer)
+
+        # make sure there are warnings
+        self.assertNotEqual(warnings, [])
+
     def test_old_playlist_converter(self):
         """Tests that the "old playlist editor" converter works without emitting any warnings
         """
@@ -85,6 +111,32 @@ class TestPlaylistConverter(unittest.TestCase):
         self.assertEqual(warnings, [])
         # and that the playlist name is correct
         self.assertEqual(name, "songs people wrote about their pets")
+
+    def test_old_playlist_converter_local_track_warnings(self):
+        # makes sure there ARE warnings when converting playlists with local tracks
+        playlist_url = "https://open.spotify.com/playlist/4rDiZp82mJm55e0Se3OkpI?si=9c987e7cea6b4458"
+        playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
+
+        # allocate buffer to contain the converted csv
+        buffer = io.StringIO()
+        _, warnings = convertlib.write_old_playlist_csv(
+            spotify, playlist_id, "hot tub listening club", date.today(), buffer)
+
+        # make sure there are warnings
+        self.assertNotEqual(warnings, [])
+
+    def test_old_playlist_converter_podcast_warnings(self):
+        # makes sure there ARE warnings when converting playlists containing podcast episodes
+        playlist_url = "https://open.spotify.com/playlist/7a5Ecmgilx7LdsPsGZlkZZ?si=7301c7c07c0c42e1"
+        playlist_id = convertlib.extract_playlist_id_from_url(playlist_url)
+
+        # allocate buffer to contain the converted csv
+        buffer = io.StringIO()
+        _, warnings = convertlib.write_old_playlist_csv(
+            spotify, playlist_id, "hot tub listening club", date.today(), buffer)
+
+        # make sure there are warnings
+        self.assertNotEqual(warnings, [])
 
 
 class TestUtil(unittest.TestCase):
