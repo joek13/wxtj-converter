@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Alert, Container, Spinner } from "react-bootstrap";
 import Footer from "./components/footer";
 import Header from "./components/header"
+import About from "./components/about";
 import Howto from "./components/howto";
 import { Options, ConvertParams } from "./components/options";
 import slugify from "slugify";
@@ -109,6 +110,7 @@ function Main() {
             {/* render warnings if present */}
             {warnings !== [] && <Warnings warnings={warnings} />}
             <Howto />
+            <About />
             <Footer />
         </main>
     </>);
