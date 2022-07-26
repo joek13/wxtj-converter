@@ -140,7 +140,11 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
         playlist_name = None
 
     # make API call for the playlist's items (i.e., its tracks)
-    playlist_items = spotify.playlist_items(playlist_id)
+    try:
+        playlist_items = spotify.playlist_items(playlist_id)
+    except spotipy.SpotifyException as e:
+        if e.http_status == 404:
+            raise RuntimeError("The playlist wasn't found. Is it marked as private?")
 
     # get info for all albums in this playlist
     album_info = _get_bulk_album_info(spotify, playlist_items)
@@ -252,7 +256,11 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
         playlist_name = None
 
     # make API call for the playlist's items (i.e., its tracks)
-    playlist_items = spotify.playlist_items(playlist_id)
+    try:
+        playlist_items = spotify.playlist_items(playlist_id)
+    except spotipy.SpotifyException as e:
+        if e.http_status == 404:
+            raise RuntimeError("The playlist wasn't found. Is it marked as private?")
 
     # get info for all albums in this playlist
     album_info = _get_bulk_album_info(spotify, playlist_items)

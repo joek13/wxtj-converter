@@ -1,4 +1,5 @@
 import json
+from multiprocessing.sharedctypes import Value
 
 from spotipy.exceptions import SpotifyException
 import convertlib
@@ -65,7 +66,7 @@ def convert_new_playlist(event, context):
         playlist_name, warnings = convertlib.write_new_playlist_csv(
             spotify, playlist_id, buffer)
 
-    except SpotifyException as e:
+    except (SpotifyException, RuntimeError) as e:
         response = {
             "statusCode": 400,
             "body": json.dumps({
@@ -132,7 +133,7 @@ def convert_old_playlist(event, context):
         playlist_name, warnings = convertlib.write_old_playlist_csv(
             spotify, playlist_id, show_title, show_date, buffer)
 
-    except SpotifyException as e:
+    except (SpotifyException, RuntimeError) as e:
         response = {
             "statusCode": 400,
             "body": {
