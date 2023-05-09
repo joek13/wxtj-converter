@@ -166,12 +166,12 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
 
         # is this track local? (imported from personal library)
         is_local_track = track["is_local"]
-        artist = track["artists"][0]  # just get the first artist on the track
+        artists = track["artists"]
         track_name = track["name"]
 
         album = track["album"]  # get album info
         album_name = album["name"]  # name of the album
-        artist_name = artist["name"]  # name of the artist
+        artist_names = ", ".join([artist["name"] for artist in artists]) # joined name of each artist
 
         label = None
         release_year = None
@@ -206,7 +206,7 @@ def write_new_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, stream: t
         row = [
             track_name,  # track title
             duration_str,  # track duration
-            artist_name,  # artist name
+            artist_names,  # artist name
             album_name,  # album name
             release_year,  # release year
             label,  # record label
@@ -282,12 +282,12 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
 
         # is this track local? (imported from personal library)
         is_local_track = track["is_local"]
-        artist = track["artists"][0]  # just get the first artist on the track
+        artists = track["artists"]
         track_name = track["name"]
 
         album = track["album"]  # get album info
         album_name = album["name"]  # name of the album
-        artist_name = artist["name"]  # name of the artist
+        artist_names = ", ".join([artist["name"] for artist in artists]) # joined name of each artist
 
         label = None
         release_year = None
@@ -323,7 +323,7 @@ def write_old_playlist_csv(spotify: spotipy.Spotify, playlist_id: str, show_titl
             track_name,  # track title
             "",  # title_url
             duration_str,  # duration
-            artist_name,  # performer
+            artist_names,  # performer
             "",  # performer_url
             album_name,  # album
             "",  # album_url
