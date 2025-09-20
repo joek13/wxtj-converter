@@ -1,0 +1,31 @@
+{
+  "name": "converter",
+  "version": "0.1.0",
+  "bin": {
+    "app": "lib/app.js"
+  },
+  "scripts": {
+    "lint": "eslint ./lib/ --ext .ts,.tsx",
+    "lint-fix": "eslint ./lib/ --ext .ts,.tsx --fix",
+    "format": "prettier --check ./lib/",
+    "format-fix": "prettier --write ./lib/",
+    "bundle": "./bin/bundle.bash",
+    "prebuild": "npm run lint && npm run format && npm run bundle",
+    "build": "tsc",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.9",
+    "aws-cdk": "2.1029.2",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.6.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.214.0",
+    "constructs": "^10.0.0",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.44.0"
+  }
+}

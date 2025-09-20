@@ -24,18 +24,16 @@ function Main() {
         setErrorMessage(undefined);
         setWarnings([]);
 
-        // select which API endpoint to use based on format
-        const apiEndpoint = params.oldPlaylistEditor ? "/convert_old_playlist" : "/convert_new_playlist";
-
         // prepare request data for API
         const data = {
+            "format": params.oldPlaylistEditor ? "old" : "new",
             "playlist_url": params.playlistUrl,
             "show_title": params.showTitle,
             "show_date": params.showDate
         };
 
         // post request to api endpoint
-        axios.post(apiEndpoint, data).then((response) => {
+        axios.post('', data).then((response) => {
             if (response.data) {
                 setWarnings(response.data.warnings);
 
