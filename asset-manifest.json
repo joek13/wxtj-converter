@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/wxtj-converter/static/css/main.8f11a4e5.chunk.css",
-    "main.js": "/wxtj-converter/static/js/main.f3478585.chunk.js",
-    "main.js.map": "/wxtj-converter/static/js/main.f3478585.chunk.js.map",
+    "main.css": "/wxtj-converter/static/css/main.8e84e84c.chunk.css",
+    "main.js": "/wxtj-converter/static/js/main.5624187e.chunk.js",
+    "main.js.map": "/wxtj-converter/static/js/main.5624187e.chunk.js.map",
     "runtime-main.js": "/wxtj-converter/static/js/runtime-main.3303390b.js",
     "runtime-main.js.map": "/wxtj-converter/static/js/runtime-main.3303390b.js.map",
     "static/js/2.d8d783d6.chunk.js": "/wxtj-converter/static/js/2.d8d783d6.chunk.js",
@@ -10,7 +10,7 @@
     "static/js/3.f8b1bc22.chunk.js": "/wxtj-converter/static/js/3.f8b1bc22.chunk.js",
     "static/js/3.f8b1bc22.chunk.js.map": "/wxtj-converter/static/js/3.f8b1bc22.chunk.js.map",
     "index.html": "/wxtj-converter/index.html",
-    "static/css/main.8f11a4e5.chunk.css.map": "/wxtj-converter/static/css/main.8f11a4e5.chunk.css.map",
+    "static/css/main.8e84e84c.chunk.css.map": "/wxtj-converter/static/css/main.8e84e84c.chunk.css.map",
     "static/js/2.d8d783d6.chunk.js.LICENSE.txt": "/wxtj-converter/static/js/2.d8d783d6.chunk.js.LICENSE.txt",
     "static/media/help1.821cbdef.png": "/wxtj-converter/static/media/help1.821cbdef.png",
     "static/media/help2.910cc469.png": "/wxtj-converter/static/media/help2.910cc469.png"
@@ -18,7 +18,7 @@
   "entrypoints": [
     "static/js/runtime-main.3303390b.js",
     "static/js/2.d8d783d6.chunk.js",
-    "static/css/main.8f11a4e5.chunk.css",
-    "static/js/main.f3478585.chunk.js"
+    "static/css/main.8e84e84c.chunk.css",
+    "static/js/main.5624187e.chunk.js"
   ]
 }
